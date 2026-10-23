@@ -16,6 +16,9 @@
   main { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
   header h1 { font-size: 22px; margin: 4px 0 4px; }
   header p { margin: 0 0 16px; color: var(--muted); }
+  /* A logo é JPEG com fundo branco: multiply faz o branco sumir sobre o fundo claro. */
+  .logo { display: block; height: 40px; width: auto; max-width: 100%; margin: 0 0 12px; mix-blend-mode: multiply; }
+  .ok .logo { margin: 0 auto 8px; }
   .marca { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
   section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin: 14px 0; }
   section h2 { font-size: 17px; margin: 0 0 12px; }
@@ -41,6 +44,10 @@
   .aviso { background: var(--warn-bg); color: var(--warn-ink); border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 14px; }
   .erros { background: var(--err-bg); color: var(--err-ink); border-radius: 8px; padding: 10px 12px; margin: 14px 0; }
   .erros ul { margin: 6px 0 0 18px; padding: 0; }
+  .destaque { background: var(--warn-bg); color: var(--warn-ink); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 12px 14px; margin: 0 0 12px; font-size: 16px; line-height: 1.4; }
+  .destaque strong { color: var(--ink); }
+  .destaque-sub { display: block; margin-top: 4px; font-size: 14px; }
   .dica { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
   .fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; margin-top: 10px; }
   .foto { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: #eee; }
@@ -59,6 +66,8 @@
 <main>
   <div id="tela-form">
     <header>
+      <!-- logo.jpg fica ao lado do index.html no site; sem o arquivo, fica só o nome em texto -->
+      <img class="logo oculto" src="logo.jpg" alt="Giovanna Dias">
       <div class="marca">Giovanna Dias</div>
       <h1>Solicitação de indenização</h1>
       <p>Preencha os dados abaixo para abrir o pedido de indenização de produtos com defeito. Leva cerca de 3 minutos.</p>
@@ -95,7 +104,10 @@
 
       <section>
         <h2>4. Fotos do defeito</h2>
-        <p class="dica" style="margin-top:0">Envie fotos que mostrem bem o defeito e, se possível, a etiqueta com a referência. Até <span id="max-fotos"></span> fotos.</p>
+        <div class="destaque">
+          <strong>Envie fotos que mostrem bem o defeito</strong> e, se possível, <strong>a etiqueta com a referência</strong>.
+          <span class="destaque-sub">Até <span id="max-fotos"></span> fotos.</span>
+        </div>
         <input id="arquivos" type="file" accept="image/*" multiple>
         <div id="fotos" class="fotos"></div>
       </section>
@@ -114,11 +126,13 @@
 
   <div id="tela-ok" class="oculto">
     <section class="ok">
+      <img class="logo oculto" src="logo.jpg" alt="Giovanna Dias">
       <div class="marca">Giovanna Dias</div>
       <h1>Pedido recebido</h1>
       <p>Guarde o número do seu protocolo:</p>
       <div class="protocolo" id="protocolo"></div>
       <p id="msg-ok">Nossa equipe vai analisar e responder pelo e-mail informado, com as orientações para a nota fiscal de devolução.</p>
+      <p id="copia" class="oculto">Enviamos uma cópia do pedido para <strong id="copia-email"></strong>.</p>
       <p class="dica">Ao escrever para indenizacoes@giovannadias.com.br sobre este pedido, coloque o protocolo no assunto.</p>
       <div id="aviso-ok" class="aviso oculto"></div>
       <button type="button" class="sec" id="novo" style="margin-top:12px">Abrir outro pedido</button>
@@ -133,6 +147,16 @@
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbwVfPMpLizzmHJmiJ335GqiO7SiIsbJEW6SEGI3WOsyAEox5ItIF-4sI2-XX33p_lGw/exec";
   var fotos = [];
   var $ = function (id) { return document.getElementById(id); };
+  // Logo: aparece só se o arquivo existir; aí o nome em texto some.
+  document.querySelectorAll('img.logo').forEach(function (img) {
+    img.onload = function () {
+      img.classList.remove('oculto');
+      var marca = img.parentNode.querySelector('.marca');
+      if (marca) marca.classList.add('oculto');
+    };
+    img.onerror = function () { img.remove(); };
+    if (img.complete && img.naturalWidth) img.onload();
+  });
   $('max-fotos').textContent = LIMITES.fotos;
 
   function soDigitos(v) { return String(v || '').replace(/\D/g, ''); }
@@ -319,6 +343,7 @@
       botao.disabled = false; botao.textContent = 'Enviar pedido';
       if (!r || !r.ok) { mostrarErros((r && r.erros) || ['Não foi possível enviar. Tente de novo.']); return; }
       $('protocolo').textContent = r.protocolo;
+      if (r.copiaEnviada) { $('copia-email').textContent = p.email.trim(); $('copia').classList.remove('oculto'); }
       if (r.foraDoPrazo) {
         $('aviso-ok').textContent = 'Pela data informada, a nota tem mais de 1 ano. Nossa equipe vai analisar se o pedido está dentro do prazo de indenização.';
         $('aviso-ok').classList.remove('oculto');
