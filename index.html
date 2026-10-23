@@ -26,6 +26,7 @@
   input, select, textarea { width: 100%; padding: 10px 12px; font: inherit; border: 1px solid var(--line);
     border-radius: 8px; background: #fff; color: var(--ink); }
   textarea { min-height: 64px; resize: vertical; }
+  textarea.obrigatorio { border-color: var(--accent); background: var(--warn-bg); }
   input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
   .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
   .grade .inteira { grid-column: 1 / -1; }
@@ -203,8 +204,18 @@
       '<div class="inteira"><label>O produto foi usado pelo consumidor?</label><div class="radios">' +
       '<label><input type="radio" name="usado' + n + '" value="Sim"> Sim</label>' +
       '<label><input type="radio" name="usado' + n + '" value="Não"> Não</label></div></div>' +
-      '<div class="inteira"><label>Observação (opcional)</label><textarea class="obs" placeholder="Descreva o defeito, se quiser"></textarea></div>' +
+      '<div class="inteira"><label class="rotulo-obs">Observação (opcional)</label><textarea class="obs" placeholder="Descreva o defeito, se quiser"></textarea></div>' +
       '</div>';
+    // "Outros" exige a descrição: o campo muda de rótulo na hora, não só ao enviar.
+    div.querySelector('.defeito').addEventListener('change', function () {
+      var outros = this.value === 'Outros';
+      var obs = div.querySelector('.obs');
+      div.querySelector('.rotulo-obs').textContent = outros ? 'Descreva o defeito (obrigatório)' : 'Observação (opcional)';
+      obs.placeholder = outros ? 'Qual é o defeito?' : 'Descreva o defeito, se quiser';
+      obs.required = outros;
+      obs.classList.toggle('obrigatorio', outros);
+      if (outros && !obs.value.trim()) obs.focus();
+    });
     div.querySelector('.remover').addEventListener('click', function () {
       if (document.querySelectorAll('.item').length > 1) { div.remove(); numerarItens(); }
     });
