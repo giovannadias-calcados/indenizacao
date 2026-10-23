@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indenização — Giovanna Dias</title>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #f6f5f2; --card: #ffffff; --ink: #1f1f1f; --muted: #6b6b6b; --line: #e2dfd8;
+    --accent: #8a3b2e; --accent-ink: #ffffff; --warn-bg: #fdf3e1; --warn-ink: #7a4b00;
+    --err-bg: #fbebeb; --err-ink: #8a1f1f; --ok-bg: #e5f4e4; --ok-ink: #1e5b26;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
+  header h1 { font-size: 22px; margin: 4px 0 4px; }
+  header p { margin: 0 0 16px; color: var(--muted); }
+  .marca { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin: 14px 0; }
+  section h2 { font-size: 17px; margin: 0 0 12px; }
+  label { display: block; font-size: 14px; font-weight: 600; margin: 10px 0 4px; }
+  input, select, textarea { width: 100%; padding: 10px 12px; font: inherit; border: 1px solid var(--line);
+    border-radius: 8px; background: #fff; color: var(--ink); }
+  textarea { min-height: 64px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+  .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+  .grade .inteira { grid-column: 1 / -1; }
+  @media (max-width: 520px) { .grade { grid-template-columns: 1fr; } }
+  .item { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 10px 0; }
+  .item-topo { display: flex; justify-content: space-between; align-items: center; }
+  .item-topo strong { font-size: 15px; }
+  .radios { display: flex; gap: 16px; padding: 6px 0; }
+  .radios label { display: flex; align-items: center; gap: 6px; font-weight: 400; margin: 0; }
+  .radios input { width: auto; }
+  button { font: inherit; border-radius: 8px; padding: 10px 14px; cursor: pointer; }
+  .sec { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+  .link { background: none; border: none; color: var(--accent); padding: 4px; }
+  .principal { width: 100%; background: var(--accent); color: var(--accent-ink); border: none; padding: 14px; font-weight: 600; font-size: 17px; }
+  .principal:disabled { opacity: .6; cursor: wait; }
+  .aviso { background: var(--warn-bg); color: var(--warn-ink); border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 14px; }
+  .erros { background: var(--err-bg); color: var(--err-ink); border-radius: 8px; padding: 10px 12px; margin: 14px 0; }
+  .erros ul { margin: 6px 0 0 18px; padding: 0; }
+  .dica { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
+  .fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; margin-top: 10px; }
+  .foto { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: #eee; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .foto button { position: absolute; top: 4px; right: 4px; padding: 0 7px; line-height: 22px; border-radius: 11px;
+    background: rgba(0,0,0,.65); color: #fff; border: none; font-size: 14px; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; }
+  .consent input { width: auto; margin-top: 4px; }
+  .ok { text-align: center; }
+  .ok .protocolo { font-size: 30px; font-weight: 700; letter-spacing: .04em; background: var(--ok-bg); color: var(--ok-ink);
+    border-radius: 10px; padding: 14px; margin: 12px 0; }
+  .oculto { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <div id="tela-form">
+    <header>
+      <div class="marca">Giovanna Dias</div>
+      <h1>Solicitação de indenização</h1>
+      <p>Preencha os dados abaixo para abrir o pedido de indenização de produtos com defeito. Leva cerca de 3 minutos.</p>
+    </header>
+
+    <form id="form" novalidate>
+      <section>
+        <h2>1. Sua loja</h2>
+        <div class="grade">
+          <div><label for="cnpj">CNPJ</label><input id="cnpj" inputmode="numeric" autocomplete="off" placeholder="00.000.000/0000-00"></div>
+          <div><label for="razao">Razão social</label><input id="razao" autocomplete="organization"></div>
+          <div><label for="contato">Seu nome</label><input id="contato" autocomplete="name"></div>
+          <div><label for="telefone">Telefone / WhatsApp</label><input id="telefone" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000"></div>
+          <div><label for="email">E-mail para resposta</label><input id="email" type="email" autocomplete="email"></div>
+          <div><label for="cidade">Cidade / UF</label><input id="cidade" placeholder="Ex.: Belo Horizonte / MG"></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Nota fiscal de compra (origem)</h2>
+        <div class="grade">
+          <div><label for="nf">Número da NF</label><input id="nf" inputmode="numeric" placeholder="Ex.: 76247"></div>
+          <div><label for="dataNf">Data de emissão</label><input id="dataNf" type="date"></div>
+        </div>
+        <p class="dica">Produtos de notas diferentes: envie um pedido para cada nota.</p>
+        <div id="aviso-prazo" class="aviso oculto"></div>
+      </section>
+
+      <section>
+        <h2>3. Produtos com defeito</h2>
+        <div id="itens"></div>
+        <button type="button" class="sec" id="add-item">+ Adicionar outro produto</button>
+      </section>
+
+      <section>
+        <h2>4. Fotos do defeito</h2>
+        <p class="dica" style="margin-top:0">Envie fotos que mostrem bem o defeito e, se possível, a etiqueta com a referência. Até <span id="max-fotos"></span> fotos.</p>
+        <input id="arquivos" type="file" accept="image/*" multiple>
+        <div id="fotos" class="fotos"></div>
+      </section>
+
+      <section>
+        <label class="consent"><input id="consentimento" type="checkbox">
+          <span>Autorizo a Giovanna Dias a usar estes dados e fotos para analisar e tratar a indenização.</span></label>
+        <p class="dica">Importante: não descarte o produto até o fim do processo. Podemos pedir novas fotos.</p>
+      </section>
+
+      <input id="site" name="site" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+      <div id="erros" class="erros oculto"></div>
+      <button type="submit" class="principal" id="enviar">Enviar pedido</button>
+    </form>
+  </div>
+
+  <div id="tela-ok" class="oculto">
+    <section class="ok">
+      <div class="marca">Giovanna Dias</div>
+      <h1>Pedido recebido</h1>
+      <p>Guarde o número do seu protocolo:</p>
+      <div class="protocolo" id="protocolo"></div>
+      <p id="msg-ok">Nossa equipe vai analisar e responder pelo e-mail informado, com as orientações para a nota fiscal de devolução.</p>
+      <p class="dica">Ao escrever para indenizacoes@giovannadias.com.br sobre este pedido, coloque o protocolo no assunto.</p>
+      <div id="aviso-ok" class="aviso oculto"></div>
+      <button type="button" class="sec" id="novo" style="margin-top:12px">Abrir outro pedido</button>
+    </section>
+  </div>
+</main>
+
+<script>
+  var DEFEITOS = ["Descolamento / solado", "Costura / descostura", "Mancha / desbotamento / cor", "Tira / fivela / rebite", "Salto quebrado ou solto", "Palmilha", "Rasgo / furo / trinca", "Descascando / verniz / bolha", "Numeração errada / par trocado", "Outro"];
+  var LIMITES = {"itens": 30, "fotos": 10, "prazoDias": 365};
+  // Vazio dentro do Apps Script; no site externo, gerar_site.py grava aqui o link /exec.
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbwVfPMpLizzmHJmiJ335GqiO7SiIsbJEW6SEGI3WOsyAEox5ItIF-4sI2-XX33p_lGw/exec";
+  var fotos = [];
+  var $ = function (id) { return document.getElementById(id); };
+  $('max-fotos').textContent = LIMITES.fotos;
+
+  function soDigitos(v) { return String(v || '').replace(/\D/g, ''); }
+  function cnpjValido(c) {
+    if (!/^\d{14}$/.test(c) || /^(\d)\1{13}$/.test(c)) return false;
+    function dv(len) {
+      var soma = 0, peso = len - 7;
+      for (var i = 0; i < len; i++) { soma += Number(c[i]) * peso--; if (peso < 2) peso = 9; }
+      var r = soma % 11; return r < 2 ? 0 : 11 - r;
+    }
+    return dv(12) === Number(c[12]) && dv(13) === Number(c[13]);
+  }
+  $('cnpj').addEventListener('input', function () {
+    var d = soDigitos(this.value).slice(0, 14);
+    this.value = d.replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2');
+  });
+
+  // Prazo: só avisa. Quem decide a recusa é a equipe.
+  $('dataNf').addEventListener('change', function () {
+    var aviso = $('aviso-prazo');
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(this.value);
+    if (!m) { aviso.classList.add('oculto'); return; }
+    var dias = Math.floor((Date.now() - new Date(+m[1], +m[2] - 1, +m[3]).getTime()) / 864e5);
+    if (dias > LIMITES.prazoDias) {
+      aviso.textContent = 'Atenção: esta nota foi emitida há mais de 1 ano. O prazo de indenização é de 1 ano a partir da emissão da NF. Você ainda pode enviar, e nossa equipe vai analisar.';
+      aviso.classList.remove('oculto');
+    } else aviso.classList.add('oculto');
+  });
+
+  function opcoesDefeito() {
+    return '<option value="">Escolha…</option>' + DEFEITOS.map(function (d) {
+      return '<option>' + d.replace(/</g, '&lt;') + '</option>';
+    }).join('');
+  }
+  var contador = 0;
+  function adicionarItem() {
+    if (document.querySelectorAll('.item').length >= LIMITES.itens) return;
+    contador++;
+    var n = contador;
+    var div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML =
+      '<div class="item-topo"><strong>Produto</strong><button type="button" class="link remover">Remover</button></div>' +
+      '<div class="grade">' +
+      '<div><label>Referência</label><input class="referencia" placeholder="Ex.: F252060"></div>' +
+      '<div><label>Cor</label><input class="cor"></div>' +
+      '<div><label>Numeração</label><input class="numeracao" inputmode="numeric" placeholder="Ex.: 37"></div>' +
+      '<div><label>Quantidade de pares</label><input class="pares" type="number" min="1" max="999" value="1"></div>' +
+      '<div class="inteira"><label>Defeito</label><select class="defeito">' + opcoesDefeito() + '</select></div>' +
+      '<div class="inteira"><label>O produto foi usado pelo consumidor?</label><div class="radios">' +
+      '<label><input type="radio" name="usado' + n + '" value="Sim"> Sim</label>' +
+      '<label><input type="radio" name="usado' + n + '" value="Não"> Não</label></div></div>' +
+      '<div class="inteira"><label>Observação (opcional)</label><textarea class="obs" placeholder="Descreva o defeito, se quiser"></textarea></div>' +
+      '</div>';
+    div.querySelector('.remover').addEventListener('click', function () {
+      if (document.querySelectorAll('.item').length > 1) { div.remove(); numerarItens(); }
+    });
+    $('itens').appendChild(div);
+    numerarItens();
+  }
+  function numerarItens() {
+    var itens = document.querySelectorAll('.item');
+    itens.forEach(function (el, i) {
+      el.querySelector('strong').textContent = 'Produto ' + (i + 1);
+      el.querySelector('.remover').style.visibility = itens.length > 1 ? 'visible' : 'hidden';
+    });
+    $('add-item').style.display = itens.length >= LIMITES.itens ? 'none' : '';
+  }
+  $('add-item').addEventListener('click', adicionarItem);
+  adicionarItem();
+
+  // Fotos: reduz para no máximo 1600 px em JPEG antes de enviar (celular manda fotos de 4–10 MB).
+  function reduzir(arquivo) {
+    return new Promise(function (ok) {
+      var leitor = new FileReader();
+      leitor.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          var escala = Math.min(1, 1600 / Math.max(img.width, img.height));
+          var c = document.createElement('canvas');
+          c.width = Math.round(img.width * escala); c.height = Math.round(img.height * escala);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          var url = c.toDataURL('image/jpeg', 0.82);
+          ok({tipo: 'image/jpeg', dados: url.split(',')[1], nome: arquivo.name, url: url});
+        };
+        // Formato que o navegador não abre (ex.: HEIC fora do iPhone): envia o original.
+        img.onerror = function () {
+          ok({tipo: arquivo.type || 'image/heic', dados: String(leitor.result).split(',')[1], nome: arquivo.name, url: ''});
+        };
+        img.src = leitor.result;
+      };
+      leitor.readAsDataURL(arquivo);
+    });
+  }
+  $('arquivos').addEventListener('change', function () {
+    var lista = Array.prototype.slice.call(this.files, 0, LIMITES.fotos - fotos.length);
+    this.value = '';
+    Promise.all(lista.map(reduzir)).then(function (novas) { fotos = fotos.concat(novas); desenharFotos(); });
+  });
+  function desenharFotos() {
+    $('fotos').innerHTML = '';
+    fotos.forEach(function (f, i) {
+      var d = document.createElement('div');
+      d.className = 'foto';
+      d.innerHTML = (f.url ? '<img alt="">' : '<div style="padding:8px;font-size:12px">' + f.nome.replace(/</g, '&lt;') + '</div>') +
+        '<button type="button" aria-label="Remover foto">×</button>';
+      if (f.url) d.querySelector('img').src = f.url;
+      d.querySelector('button').addEventListener('click', function () { fotos.splice(i, 1); desenharFotos(); });
+      $('fotos').appendChild(d);
+    });
+    $('arquivos').disabled = fotos.length >= LIMITES.fotos;
+  }
+
+  function coletar() {
+    return {
+      cnpj: $('cnpj').value, razao: $('razao').value, contato: $('contato').value, email: $('email').value,
+      telefone: $('telefone').value, cidade: $('cidade').value, nf: $('nf').value, dataNf: $('dataNf').value,
+      itens: Array.prototype.map.call(document.querySelectorAll('.item'), function (el) {
+        var usado = el.querySelector('input[type=radio]:checked');
+        return {
+          referencia: el.querySelector('.referencia').value, cor: el.querySelector('.cor').value,
+          numeracao: el.querySelector('.numeracao').value, pares: Number(el.querySelector('.pares').value),
+          defeito: el.querySelector('.defeito').value, usado: usado ? usado.value : '', obs: el.querySelector('.obs').value,
+        };
+      }),
+      fotos: fotos.map(function (f) { return {tipo: f.tipo, dados: f.dados, nome: f.nome}; }),
+      consentimento: $('consentimento').checked,
+      site: $('site').value,
+    };
+  }
+  // Dentro do Apps Script usa google.script.run; no site externo, POST para o /exec.
+  function enviarAoServidor(p, ok, falha) {
+    if (window.google && google.script && google.script.run) {
+      google.script.run.withSuccessHandler(ok).withFailureHandler(falha).enviarPedidoIndenizacao(p);
+      return;
+    }
+    fetch(ENDPOINT, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(p)})
+      .then(function (r) { return r.json(); }).then(ok).catch(falha);
+  }
+  // Conferência rápida no navegador; o servidor valida tudo de novo.
+  function errosLocais(p) {
+    var e = [];
+    if (!cnpjValido(soDigitos(p.cnpj))) e.push('CNPJ inválido.');
+    if (!p.razao.trim()) e.push('Informe a razão social.');
+    if (!p.contato.trim()) e.push('Informe seu nome.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.email.trim())) e.push('E-mail inválido.');
+    var tel = soDigitos(p.telefone).length;
+    if (tel < 10 || tel > 13) e.push('Telefone inválido (DDD + número).');
+    if (!p.cidade.trim()) e.push('Informe a cidade/UF.');
+    if (!soDigitos(p.nf)) e.push('Informe o número da NF de origem.');
+    if (!p.dataNf) e.push('Informe a data de emissão da NF.');
+    p.itens.forEach(function (it, i) {
+      var r = 'Produto ' + (i + 1) + ': ';
+      if (!it.referencia.trim()) e.push(r + 'informe a referência.');
+      if (!it.numeracao.trim()) e.push(r + 'informe a numeração.');
+      if (!(it.pares >= 1)) e.push(r + 'informe a quantidade de pares.');
+      if (!it.defeito) e.push(r + 'escolha o defeito.');
+      if (it.defeito === 'Outro' && !it.obs.trim()) e.push(r + 'descreva o defeito na observação.');
+      if (!it.usado) e.push(r + 'informe se o produto foi usado.');
+    });
+    if (!p.fotos.length) e.push('Envie pelo menos uma foto do defeito.');
+    if (!p.consentimento) e.push('Marque a autorização de uso dos dados.');
+    return e;
+  }
+  function mostrarErros(lista) {
+    var box = $('erros');
+    box.innerHTML = '<strong>Confira antes de enviar:</strong><ul>' + lista.map(function (x) {
+      return '<li>' + String(x).replace(/</g, '&lt;') + '</li>';
+    }).join('') + '</ul>';
+    box.classList.remove('oculto');
+    box.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+
+  $('form').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var p = coletar();
+    var e = errosLocais(p);
+    if (e.length) { mostrarErros(e); return; }
+    $('erros').classList.add('oculto');
+    var botao = $('enviar');
+    botao.disabled = true; botao.textContent = 'Enviando…';
+    enviarAoServidor(p, function (r) {
+      botao.disabled = false; botao.textContent = 'Enviar pedido';
+      if (!r || !r.ok) { mostrarErros((r && r.erros) || ['Não foi possível enviar. Tente de novo.']); return; }
+      $('protocolo').textContent = r.protocolo;
+      if (r.foraDoPrazo) {
+        $('aviso-ok').textContent = 'Pela data informada, a nota tem mais de 1 ano. Nossa equipe vai analisar se o pedido está dentro do prazo de indenização.';
+        $('aviso-ok').classList.remove('oculto');
+      }
+      $('tela-form').classList.add('oculto');
+      $('tela-ok').classList.remove('oculto');
+      window.scrollTo(0, 0);
+    }, function () {
+      botao.disabled = false; botao.textContent = 'Enviar pedido';
+      mostrarErros(['Não foi possível enviar agora (conexão ou arquivo muito grande). Tente de novo em instantes.']);
+    });
+  });
+  $('novo').addEventListener('click', function () { window.location.reload(); });
+</script>
+</body>
+</html>
