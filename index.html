@@ -44,10 +44,6 @@
   .aviso { background: var(--warn-bg); color: var(--warn-ink); border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 14px; }
   .erros { background: var(--err-bg); color: var(--err-ink); border-radius: 8px; padding: 10px 12px; margin: 14px 0; }
   .erros ul { margin: 6px 0 0 18px; padding: 0; }
-  .destaque { background: var(--warn-bg); color: var(--warn-ink); border-left: 4px solid var(--accent);
-    border-radius: 8px; padding: 12px 14px; margin: 0 0 12px; font-size: 16px; line-height: 1.4; }
-  .destaque strong { color: var(--ink); }
-  .destaque-sub { display: block; margin-top: 4px; font-size: 14px; }
   .dica { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
   .fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; margin-top: 10px; }
   .foto { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: #eee; }
@@ -104,10 +100,7 @@
 
       <section>
         <h2>4. Fotos do defeito</h2>
-        <div class="destaque">
-          <strong>Envie fotos que mostrem bem o defeito</strong> e, se possível, <strong>a etiqueta com a referência</strong>.
-          <span class="destaque-sub">Até <span id="max-fotos"></span> fotos.</span>
-        </div>
+        <p class="dica" style="margin-top:0">Envie fotos que evidenciem bem o defeito e, se possível, a etiqueta com a referência. Até <span id="max-fotos"></span> fotos.</p>
         <input id="arquivos" type="file" accept="image/*" multiple>
         <div id="fotos" class="fotos"></div>
       </section>
@@ -141,7 +134,7 @@
 </main>
 
 <script>
-  var DEFEITOS = ["Descolamento / solado", "Costura / descostura", "Mancha / desbotamento / cor", "Tira / fivela / rebite", "Salto quebrado ou solto", "Palmilha", "Rasgo / furo / trinca", "Descascando / verniz / bolha", "Numeração errada / par trocado", "Outro"];
+  var DEFEITOS = ["Enfeite solto", "Enfeite quebrado/manchado", "Descolando", "Cabedal Rasgado", "Cabedal Manchado", "Descascando", "Desbotando", "Descosturando", "Numeração Trocada", "Falta de pares na caixa", "Dedinho rasgado/arrebentado", "Fivela/Rebite quebrado", "Marca divergente", "Tira arrebentada", "Mau acabamento", "Demora na entrega", "Desacordo Comercial", "Outros"];
   var LIMITES = {"itens": 30, "fotos": 10, "prazoDias": 365};
   // Vazio dentro do Apps Script; no site externo, gerar_site.py grava aqui o link /exec.
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbwVfPMpLizzmHJmiJ335GqiO7SiIsbJEW6SEGI3WOsyAEox5ItIF-4sI2-XX33p_lGw/exec";
@@ -315,7 +308,7 @@
       if (!it.numeracao.trim()) e.push(r + 'informe a numeração.');
       if (!(it.pares >= 1)) e.push(r + 'informe a quantidade de pares.');
       if (!it.defeito) e.push(r + 'escolha o defeito.');
-      if (it.defeito === 'Outro' && !it.obs.trim()) e.push(r + 'descreva o defeito na observação.');
+      if (it.defeito === 'Outros' && !it.obs.trim()) e.push(r + 'descreva o defeito na observação.');
       if (!it.usado) e.push(r + 'informe se o produto foi usado.');
     });
     if (!p.fotos.length) e.push('Envie pelo menos uma foto do defeito.');
