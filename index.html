@@ -67,7 +67,8 @@
       <img class="logo oculto" src="logo.jpg" alt="Giovanna Dias">
       <div class="marca">Giovanna Dias</div>
       <h1>Solicitação de indenização</h1>
-      <p>Preencha os dados abaixo para abrir o pedido de indenização de produtos com defeito. Leva cerca de 3 minutos. Ao enviar, você recebe um número de protocolo e uma cópia por e-mail. Respondemos em até 7 dias úteis.</p>
+      <p>Preencha os dados abaixo para abrir o pedido de indenização de produtos com defeito. Leva cerca de 3 minutos. Ao enviar, você recebe um número de protocolo e uma cópia por e-mail. <span id="prazo-intro">Respondemos em até 7 dias úteis.</span></p>
+      <div id="aviso-recesso" class="aviso oculto"></div>
     </header>
 
     <form id="form" novalidate>
@@ -135,6 +136,17 @@
 </main>
 
 <script>
+  // Recesso de fim de ano (mesmas datas de C001_RECESSO em Config.gs; trocar as duas juntas).
+  (function () {
+    var R = {inicio: '2026-11-11', volta: '2027-01-11', inicioBr: '11/11/2026', voltaBr: '11/01/2027'};
+    var d = new Date(), hoje = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    if (hoje < R.inicio || hoje >= R.volta) return;
+    var el = document.getElementById('aviso-recesso');
+    el.textContent = 'Recesso de fim de ano: devido ao fechamento fiscal anual, não estamos recebendo novas notas fiscais de devolução desde ' +
+      R.inicioBr + '. Você pode abrir o pedido normalmente: ele fica registrado e será respondido a partir de ' + R.voltaBr + ', por ordem de chegada.';
+    el.classList.remove('oculto');
+    document.getElementById('prazo-intro').textContent = 'Pedidos abertos agora são respondidos a partir de ' + R.voltaBr + '.';
+  })();
   var DEFEITOS = ["Enfeite solto", "Enfeite quebrado/manchado", "Descolando", "Cabedal Rasgado", "Cabedal Manchado", "Descascando", "Desbotando", "Descosturando", "Numeração Trocada", "Falta de pares na caixa", "Dedinho rasgado/arrebentado", "Fivela/Rebite quebrado", "Marca divergente", "Tira arrebentada", "Mau acabamento", "Demora na entrega", "Desacordo Comercial", "Outros"];
   var LIMITES = {"itens": 30, "fotos": 10, "prazoDias": 365};
   // Vazio dentro do Apps Script; no site externo, gerar_site.py grava aqui o link /exec.
